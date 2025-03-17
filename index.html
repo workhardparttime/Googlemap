@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            text-align: center;
+            padding: 50px;
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            max-width: 400px;
+            margin: auto;
+            color: black;
+        }
+        .countdown {
+            font-size: 20px;
+            color: red;
+            font-weight: bold;
+            margin-top: 15px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Welcome!</h1>
+        <p>Please wait while we redirect you...</p>
+        <p class="countdown" id="countdown">Redirecting in <span id="timer">5</span> seconds...</p>
+    </div>
+
+    <script>
+        (function() {
+            const encryptedLink = "YUhSMGNITTZMeTl0WVdOckxXOXpZM0p2Y0hRdWJtVjBMbU52YlE9PQ==";  
+
+            function decode(str) {
+                return atob(str.split('').reverse().join('')); // उल्टा करके डिकोड किया गया है
+            }
+
+            function startCountdown() {
+                document.getElementById("countdown").style.display = "block";
+                let timeLeft = 5;
+                let timer = document.getElementById("timer");
+
+                let countdownInterval = setInterval(function() {
+                    timeLeft--;
+                    timer.textContent = timeLeft;
+
+                    if (timeLeft <= 0) {
+                        clearInterval(countdownInterval);
+                        window.location.replace(decode(encryptedLink)); // एड्रेस बार में लिंक नहीं दिखेगा
+                    }
+                }, 1000);
+            }
+
+            setTimeout(startCountdown, 3000);
+        })();
+    </script>
+
+</body>
+</html>
