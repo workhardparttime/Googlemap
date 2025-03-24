@@ -1,69 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting...</title>
+    <title>Custom URL Generator</title>
     <style>
+        /* ✨ Background Styling */
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #00c6ff, #0072ff);
+            font-family: 'Poppins', sans-serif;
             text-align: center;
-            padding: 50px;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #ffdde1);
+            animation: bgAnimation 6s infinite alternate;
+        }
+
+        /* ✨ Background Animation */
+        @keyframes bgAnimation {
+            0% { background: linear-gradient(135deg, #ff9a9e, #fad0c4, #ffdde1); }
+            100% { background: linear-gradient(135deg, #ffdde1, #fad0c4, #ff9a9e); }
+        }
+
+        /* ✨ Glassmorphism Card */
+        .card {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* ✨ Input & Button Styling */
+        input, button {
+            margin: 10px;
+            padding: 12px;
+            width: 90%;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        input {
+            background: rgba(255, 255, 255, 0.4);
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            background: white;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff512f, #dd2476);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255, 81, 47, 0.6);
+        }
+
+        /* ✨ Result Styling */
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
             color: white;
         }
-        .container {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-            max-width: 400px;
-            margin: auto;
-            color: black;
+
+        /* ✨ Telegram Button Styling */
+        .telegram-icon {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #0088cc, #0044cc);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 60px;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0, 136, 204, 0.8);
+            animation: blink 1.5s infinite alternate;
+            transition: 0.3s;
         }
-        .countdown {
-            font-size: 20px;
-            color: red;
-            font-weight: bold;
-            margin-top: 15px;
-            display: none;
+
+        .telegram-icon:hover {
+            transform: scale(1.2) rotate(10deg);
+            box-shadow: 0 0 15px rgba(0, 136, 204, 1);
+        }
+
+        .telegram-icon img {
+            width: 35px;
+            height: 35px;
+            vertical-align: middle;
+        }
+
+        /* ✨ Blink Animation */
+        @keyframes blink {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        /* ✨ Fade In Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Welcome!</h1>
-        <p>Please wait while we redirect you...</p>
-        <p class="countdown" id="countdown">Redirecting in <span id="timer">5</span> seconds...</p>
+    <div class="card">
+        <h2 style="color: white; text-shadow: 2px 2px 5px black;">Custom URL Generator</h2>
+        
+        <label style="color: white;">🔹 Channel Name:</label><br>
+        <input type="text" id="channelName" placeholder="Enter Channel Name"><br>
+
+        <label style="color: white;">🔗 Customer URL:</label><br>
+        <input type="text" id="channelLink" placeholder="Enter Your URL"><br>
+
+        <button onclick="generateURL()">✨ Generate Custom URL</button>
+
+        <p id="result"></p>
+
+        <!-- Telegram Button -->
+        <a href="https://t.me/SFAEarnings" target="_blank" class="telegram-icon">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+        </a>
     </div>
 
     <script>
-        (function() {
-            const encryptedLink = "YUhSMGNITTZMeTl0WVdOckxXOXpZM0p2Y0hRdWJtVjBMbU52YlE9PQ==";  
+        function generateURL() {
+            let baseURL = window.location.origin + window.location.pathname + "?redirect=";  
+            let channelName = document.getElementById("channelName").value.trim();
+            let channelLink = document.getElementById("channelLink").value.trim();
 
-            function decode(str) {
-                return atob(str.split('').reverse().join('')); // उल्टा करके डिकोड किया गया है
+            if (channelName === "" || channelLink === "") {
+                alert("⚠️ कृपया सभी फील्ड भरें!");
+                return;
             }
 
-            function startCountdown() {
-                document.getElementById("countdown").style.display = "block";
-                let timeLeft = 5;
-                let timer = document.getElementById("timer");
+            let customSlug = encodeURIComponent(channelLink);  
+            let customURL = baseURL + customSlug;
 
-                let countdownInterval = setInterval(function() {
-                    timeLeft--;
-                    timer.textContent = timeLeft;
+            document.getElementById("result").innerHTML = 
+                `✅ आपका Custom URL: <a href="${customURL}" target="_blank" style="color: yellow; text-shadow: 1px 1px 5px black;">${customURL}</a>`;
+        }
 
-                    if (timeLeft <= 0) {
-                        clearInterval(countdownInterval);
-                        window.location.replace(decode(encryptedLink)); // एड्रेस बार में लिंक नहीं दिखेगा
-                    }
-                }, 1000);
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirectURL = urlParams.get('redirect');
+
+            if (redirectURL) {
+                window.location.href = decodeURIComponent(redirectURL);
             }
-
-            setTimeout(startCountdown, 3000);
-        })();
+        };
     </script>
 
 </body>
